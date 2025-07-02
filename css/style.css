@@ -293,13 +293,30 @@ footer {
 
 /* Justering for veldig små høyder */
 @media (max-height: 700px) {
-  .converter {
-    max-height: 80vh;
-    overflow-y: auto;
+  header {
+    padding: 0.5rem;
+  }
+
+  .converter-container {
+    padding: 0.5rem;
+  }
+
+  .converter-box {
+    padding: 1rem;
+  }
+
+  .result-box {
+    margin-top: 1rem;
+    padding: 0.6rem;
+  }
+
+  .convert-btn {
+    padding: 0.6rem;
+    font-size: 1rem;
   }
 
   footer {
-    position: static;
-    margin-top: 1rem;
+    padding: 0.4rem;
+    font-size: 0.75rem;
   }
 }
