@@ -1,52 +1,169 @@
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background: #f4f4f4;
-  color: #111;
+/* === Temavariabler === */
+:root {
+  --bg-color: #f9f9fb;
+  --text-color: #1c1c1c;
+  --card-bg: #ffffff;
+  --card-hover: #f1f5ff;
+  --btn-bg: #0077cc;
+  --btn-text: #ffffff;
+  --border-color: #ccc;
+}
+
+[data-theme='dark'] {
+  --bg-color: #1e1e1e;
+  --text-color: #f1f1f1;
+  --card-bg: #2c2c2c;
+  --card-hover: #3a3a3a;
+  --btn-bg: #005fa3;
+  --btn-text: #ffffff;
+  --border-color: #444;
+}
+
+/* === Basisoppsett === */
+* {
+  box-sizing: border-box;
   margin: 0;
-  padding: 2rem;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+header {
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+header p {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+/* Tema-knapp og container */
+.theme-toggle-container {
   display: flex;
   justify-content: center;
-}
-
-.container {
-  background: white;
-  padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  width: 100%;
-  max-width: 400px;
-}
-
-input, select, button {
-  width: 100%;
-  margin: 0.5rem 0;
-  padding: 0.6rem;
-  font-size: 1rem;
-  border-radius: 0.5rem;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
-
-button {
-  background: #0077cc;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.result {
+  align-items: center;
   margin-top: 1rem;
-  background: #eef;
-  padding: 1rem;
-  border-radius: 0.5rem;
+  gap: 0.5rem;
+  font-size: 1rem;
+  color: var(--text-color);
 }
 
 .theme-toggle {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
+  font-size: 1.5rem;
   background: none;
-  border: none;
-  font-size: 1.2rem;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+  padding: 0.4rem 0.6rem;
   cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.2);
+  background-color: var(--card-hover);
+}
+
+/* === Hovedcontainer === */
+.converter-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem 1rem;
+}
+
+.converter-box {
+  background-color: var(--card-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  max-width: 450px;
+  width: 100%;
+  color: var(--text-color);
+}
+
+.field {
+  margin-bottom: 1.5rem;
+}
+
+.field label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+}
+
+/* Side-ved-side */
+.field-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.field-row .field {
+  flex: 1;
+}
+
+/* Konverter-knapp */
+.convert-btn {
+  display: block;
+  width: 100%;
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
+  border: none;
+  padding: 0.9rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.convert-btn:hover {
+  background-color: #004e85;
+}
+
+/* Resultat */
+.result-box {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: var(--card-hover);
+  border-left: 4px solid var(--btn-bg);
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+/* Footer */
+footer {
+  background-color: #eee;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: #555;
 }

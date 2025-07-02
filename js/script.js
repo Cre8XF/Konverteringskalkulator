@@ -19,13 +19,6 @@ const units = {
     dm3: 1000,
     m3: 1000000
   },
-  time: {
-    s: 1,
-    min: 60,
-    h: 3600,
-    d: 86400,
-    wk: 604800
-  },
   weight: {
     mg: 0.001,
     g: 1,
@@ -43,17 +36,26 @@ const units = {
     yd: 0.9144,
     mi: 1609.34
   },
-  temperature: {} // Spesialhåndteres
+  time: {
+    s: 1,
+    min: 60,
+    h: 3600,
+    d: 86400,
+    wk: 604800
+  },
+  temperature: {} // håndteres manuelt
 };
 
 function populateUnits() {
-  const category = document.getElementById("category").value;
-  const fromSelect = document.getElementById("fromUnit");
-  const toSelect = document.getElementById("toUnit");
+  const category = document.getElementById('category').value;
+  const fromSelect = document.getElementById('fromUnit');
+  const toSelect = document.getElementById('toUnit');
 
-  
-  if (category === "temperature") {
-    const tempUnits = ["c", "f", "k"];
+  fromSelect.innerHTML = '';
+  toSelect.innerHTML = '';
+
+  if (category === 'temperature') {
+    const tempUnits = ['c', 'f', 'k'];
     tempUnits.forEach(unit => {
       const label = unit.toUpperCase();
       fromSelect.add(new Option(label, unit));
@@ -61,62 +63,74 @@ function populateUnits() {
     });
     return;
   }
-fromSelect.innerHTML = '';
-  toSelect.innerHTML = '';
 
   for (let unit in units[category]) {
-    const label = unit + ' (' + unit + ')';
-    const option1 = new Option(label, unit);
-    const option2 = new Option(label, unit);
+    const option1 = new Option(unit.toUpperCase(), unit);
+    const option2 = new Option(unit.toUpperCase(), unit);
     fromSelect.add(option1);
     toSelect.add(option2);
   }
 }
 
 function convert() {
-  const category = document.getElementById("category").value;
-  const value = parseFloat(document.getElementById("inputValue").value);
-  const from = document.getElementById("fromUnit").value;
-  const to = document.getElementById("toUnit").value;
+  const category = document.getElementById('category').value;
+  const value = parseFloat(document.getElementById('inputValue').value);
+  const from = document.getElementById('fromUnit').value;
+  const to = document.getElementById('toUnit').value;
+  const resultBox = document.getElementById('result');
 
   if (isNaN(value)) {
-    document.getElementById("result").innerText = "Ugyldig verdi";
+    resultBox.innerText = '🛑 Ugyldig tallverdi.';
     return;
   }
 
-  
-  if (category === "temperature") {
-    let result;
-    if (from === to) {
-      result = value;
-    } else if (from === "c" && to === "f") {
-      result = value * 9/5 + 32;
-    } else if (from === "f" && to === "c") {
-      result = (value - 32) * 5/9;
-    } else if (from === "c" && to === "k") {
-      result = value + 273.15;
-    } else if (from === "k" && to === "c") {
-      result = value - 273.15;
-    } else if (from === "f" && to === "k") {
-      result = (value - 32) * 5/9 + 273.15;
-    } else if (from === "k" && to === "f") {
-      result = (value - 273.15) * 9/5 + 32;
-    } else {
-      result = "Ugyldig konvertering";
-    }
-    document.getElementById("result").innerText = `${value} ${from} = ${result.toFixed(2)} ${to}`;
-    return;
+  let result;
+
+  if (category === 'temperature') {
+    result = convertTemperature(value, from, to);
+  } else {
+    const valueInBase = value * units[category][from];
+    result = valueInBase / units[category][to];
   }
-const valueInBase = value * units[category][from];
-  const converted = valueInBase / units[category][to];
-  document.getElementById("result").innerText = `${value} ${from} = ${converted.toFixed(2)} ${to}`;
+
+  resultBox.innerText = `${value} ${from.toUpperCase()} = ${result.toFixed(2)} ${to.toUpperCase()}`;
+}
+
+function convertTemperature(value, from, to) {
+  if (from === to) return value;
+
+  if (from === 'c') {
+    if (to === 'f') return value * 9 / 5 + 32;
+    if (to === 'k') return value + 273.15;
+  } else if (from === 'f') {
+    if (to === 'c') return (value - 32) * 5 / 9;
+    if (to === 'k') return (value - 32) * 5 / 9 + 273.15;
+  } else if (from === 'k') {
+    if (to === 'c') return value - 273.15;
+    if (to === 'f') return (value - 273.15) * 9 / 5 + 32;
+  }
+
+  return 'Ugyldig konvertering';
 }
 
 function toggleTheme() {
   const body = document.body;
-  const newTheme = body.getAttribute("data-theme") === "light" ? "dark" : "light";
+  const currentTheme = body.getAttribute("data-theme") || "light";
+  const newTheme = currentTheme === "light" ? "dark" : "light";
+
   body.setAttribute("data-theme", newTheme);
+  localStorage.setItem("theme", newTheme);
   document.querySelector(".theme-toggle").textContent = newTheme === "dark" ? "🌞" : "🌙";
 }
 
-populateUnits();
+// Når siden lastes:
+document.addEventListener('DOMContentLoaded', () => {
+  const savedTheme = localStorage.getItem("theme") || "light";
+  document.body.setAttribute("data-theme", savedTheme);
+  document.querySelector(".theme-toggle").textContent = savedTheme === "dark" ? "🌞" : "🌙";
+
+  populateUnits(); // viktig at denne fortsatt kalles
+  document.querySelector(".theme-toggle").addEventListener("click", toggleTheme);
+});
+
+
