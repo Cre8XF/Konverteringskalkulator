@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="no">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Konverteringskalkulator</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body data-theme="light">
+  <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+  <div class="container">
+    <h1>🔄 Konverteringskalkulator</h1>
+
+    <label for="category">Kategori:</label>
+    <select id="category" onchange="populateUnits()">
+      <option value="volume">Volum</option>
+      <option value="time">Tid</option>
+      <option value="weight">Vekt</option>
+      <option value="length">Lengde</option>
+      <option value="temperature">Temperatur</option>
+    </select>
+
+    <input type="number" id="inputValue" placeholder="Skriv inn verdi" step="any" />
+
+    <label for="fromUnit">Fra:</label>
+    <select id="fromUnit"></select>
+
+    <label for="toUnit">Til:</label>
+    <select id="toUnit"></select>
+
+    <button onclick="convert()">Konverter</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+
+</html>
