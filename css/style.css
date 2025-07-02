@@ -219,3 +219,26 @@ footer {
     padding: 0.8rem;
   }
 }
+@media (max-width: 400px) {
+  .container {
+    padding: 1.5rem;
+  }
+
+  .converter {
+    padding: 1.5rem;
+  }
+
+  .theme-toggle-wrapper {
+    margin-bottom: 0.5rem;
+  }
+
+  .result {
+    font-size: 0.9rem;
+    padding: 0.75rem 1rem;
+  }
+
+  footer {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.7rem;
+  }
+}
