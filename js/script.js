@@ -1,47 +1,47 @@
 const units = {
   volume: {
-    ml: 1,
-    cl: 10,
-    dl: 100,
-    l: 1000,
-    ts: 5,
-    ss: 15,
-    kopp: 250,
-    tsp: 4.93,
-    tbsp: 14.79,
-    cup: 236.6,
-    fl_oz: 29.57,
-    pt: 473.18,
-    qt: 946.35,
-    gal: 3785.41,
-    gal_uk: 4546.09,
-    cm3: 1,
-    dm3: 1000,
-    m3: 1000000
+    ml: { name: "Milliliter", factor: 1 },
+    cl: { name: "Centiliter", factor: 10 },
+    dl: { name: "Deciliter", factor: 100 },
+    l: { name: "Liter", factor: 1000 },
+    ts: { name: "Teskje", factor: 5 },
+    ss: { name: "Spiseskje", factor: 15 },
+    kopp: { name: "Kopp (norsk)", factor: 250 },
+    tsp: { name: "Teskje (US)", factor: 4.93 },
+    tbsp: { name: "Spiseskje (US)", factor: 14.79 },
+    cup: { name: "Kopp (US)", factor: 236.6 },
+    fl_oz: { name: "Fluid ounce (US)", factor: 29.57 },
+    pt: { name: "Pint (US)", factor: 473.18 },
+    qt: { name: "Quart (US)", factor: 946.35 },
+    gal: { name: "Gallon (US)", factor: 3785.41 },
+    gal_uk: { name: "Gallon (UK)", factor: 4546.09 },
+    cm3: { name: "Kubikkcentimeter (cm³)", factor: 1 },
+    dm3: { name: "Kubikkdesimeter (dm³)", factor: 1000 },
+    m3: { name: "Kubikkmeter (m³)", factor: 1000000 }
   },
   weight: {
-    mg: 0.001,
-    g: 1,
-    kg: 1000,
-    oz: 28.3495,
-    lb: 453.592
+    mg: { name: "Milligram", factor: 0.001 },
+    g: { name: "Gram", factor: 1 },
+    kg: { name: "Kilogram", factor: 1000 },
+    oz: { name: "Ounce (oz)", factor: 28.3495 },
+    lb: { name: "Pund (lb)", factor: 453.592 }
   },
   length: {
-    mm: 0.001,
-    cm: 0.01,
-    m: 1,
-    km: 1000,
-    inch: 0.0254,
-    ft: 0.3048,
-    yd: 0.9144,
-    mi: 1609.34
+    mm: { name: "Millimeter", factor: 0.001 },
+    cm: { name: "Centimeter", factor: 0.01 },
+    m: { name: "Meter", factor: 1 },
+    km: { name: "Kilometer", factor: 1000 },
+    inch: { name: "Tommer (inch)", factor: 0.0254 },
+    ft: { name: "Fot (ft)", factor: 0.3048 },
+    yd: { name: "Yard (yd)", factor: 0.9144 },
+    mi: { name: "Mile (mi)", factor: 1609.34 }
   },
   time: {
-    s: 1,
-    min: 60,
-    h: 3600,
-    d: 86400,
-    wk: 604800
+    s: { name: "Sekund", factor: 1 },
+    min: { name: "Minutt", factor: 60 },
+    h: { name: "Time", factor: 3600 },
+    d: { name: "Dag", factor: 86400 },
+    wk: { name: "Uke", factor: 604800 }
   },
   temperature: {} // håndteres manuelt
 };
@@ -64,11 +64,13 @@ function populateUnits() {
     return;
   }
 
-  for (let unit in units[category]) {
-    const option1 = new Option(unit.toUpperCase(), unit);
-    const option2 = new Option(unit.toUpperCase(), unit);
-    fromSelect.add(option1);
-    toSelect.add(option2);
+  const categoryUnits = units[category];
+
+  for (let unit in categoryUnits) {
+    const name = categoryUnits[unit].name || unit.toUpperCase();
+    const label = `${unit.toUpperCase()} – ${name}`;
+    fromSelect.add(new Option(label, unit));
+    toSelect.add(new Option(label, unit));
   }
 }
 
@@ -89,8 +91,10 @@ function convert() {
   if (category === 'temperature') {
     result = convertTemperature(value, from, to);
   } else {
-    const valueInBase = value * units[category][from];
-    result = valueInBase / units[category][to];
+    const fromFactor = units[category][from].factor;
+    const toFactor = units[category][to].factor;
+    const valueInBase = value * fromFactor;
+    result = valueInBase / toFactor;
   }
 
   resultBox.innerText = `${value} ${from.toUpperCase()} = ${result.toFixed(2)} ${to.toUpperCase()}`;
@@ -123,14 +127,11 @@ function toggleTheme() {
   document.querySelector(".theme-toggle").textContent = newTheme === "dark" ? "🌞" : "🌙";
 }
 
-// Når siden lastes:
 document.addEventListener('DOMContentLoaded', () => {
   const savedTheme = localStorage.getItem("theme") || "light";
   document.body.setAttribute("data-theme", savedTheme);
   document.querySelector(".theme-toggle").textContent = savedTheme === "dark" ? "🌞" : "🌙";
 
-  populateUnits(); // viktig at denne fortsatt kalles
+  populateUnits();
   document.querySelector(".theme-toggle").addEventListener("click", toggleTheme);
 });
-
-
